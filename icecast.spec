@@ -1,0 +1,96 @@
+%define name		icecast
+%define version		2.3.1
+%define release		%mkrel 3
+
+Name:		%{name}
+Version:	%{version}
+Release:	%{release}
+Summary:	Streaming Media Server
+Group:		System/Servers
+License:	GPL
+URL:		http://www.icecast.org
+Source0:	http://downloads.us.xiph.org/releases/icecast/%{name}-%{version}.tar.bz2
+Source1:	%{name}.init.bz2
+Source2:	%{name}.logrotate
+Patch0:		%{name}.conf.patch
+Patch1:		%{name}-curl.patch
+BuildRoot:	%{_tmppath}/%{name}-buildroot
+Requires(pre):	rpm-helper
+Requires(post):	rpm-helper
+Requires(postun):	rpm-helper
+Requires(preun):	rpm-helper
+BuildRequires:	libxslt-devel
+BuildRequires:	libcurl-devel
+BuildRequires:	libvorbis-devel
+BuildRequires:	libogg-devel
+BuildRequires:	libtheora-devel
+BuildRequires:  speex-devel
+Epoch:		2
+
+%description
+Icecast is an Internet based broadcasting system based on the Mpeg Layer III
+streaming technology.  It was originally inspired by Nullsoft's Shoutcast
+and also mp3serv by Scott Manley.  The icecast project was started for several
+reasons: a) all broadcasting systems were pretty much closed source,
+non-free software implementations, b) Shoutcast doesn't allow you to run your
+own directory servers, or support them, and c) we thought it would be a
+lot of fun.
+
+%prep
+%setup -q -n %{name}-%{version}
+%patch0
+%patch1 -p1
+bzcat %{SOURCE1} > %{name}
+
+%build
+./autogen.sh || :
+%configure
+%make
+
+%install
+rm -rf $RPM_BUILD_ROOT
+%makeinstall
+install -d -m 755 $RPM_BUILD_ROOT%{_var}/log/%{name}
+install -d -m 755 $RPM_BUILD_ROOT%{_datadir}/%{name}
+
+# remove installed documentation
+rm -rf $RPM_BUILD_ROOT%{_datadir}/doc/%{name}
+
+install -d -m 755 $RPM_BUILD_ROOT%{_initrddir}
+install -m 755 %{name} $RPM_BUILD_ROOT%{_initrddir}
+
+# logrotate
+install -d %{buildroot}%{_sysconfdir}/logrotate.d/
+install -m644 %{SOURCE2} %{buildroot}%{_sysconfdir}/logrotate.d/%{name}
+
+# to hold pid file ( need to be writable by icecast )
+mkdir -p $RPM_BUILD_ROOT/%{_var}/run/%{name}/
+
+%clean 
+rm -rf $RPM_BUILD_ROOT
+
+%pre
+%_pre_useradd %{name} %{_datadir}/%{name} /bin/false
+
+%post
+%_post_service %{name}
+
+%preun
+%_preun_service %{name}
+
+%postun
+%_postun_userdel %{name}
+
+%files
+%defattr(-,root,root)
+%doc AUTHORS COPYING HACKING README TODO
+%{_bindir}/*
+%{_datadir}/%{name}
+%attr(-,icecast,icecast) %{_var}/log/%{name}
+%attr(-,icecast,icecast) %dir %{_var}/run/%{name}/
+%config(noreplace) %{_sysconfdir}/%{name}.xml
+%config(noreplace) %{_initrddir}/%{name}
+%config(noreplace) %{_sysconfdir}/logrotate.d/%{name}
+
+
+
