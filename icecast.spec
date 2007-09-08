@@ -1,31 +1,27 @@
-%define name		icecast
-%define version		2.3.1
-%define release		%mkrel 3
-
-Name:		%{name}
-Version:	%{version}
-Release:	%{release}
+Name:		icecast
+Version:	2.3.1
+Release:	%mkrel 4
 Summary:	Streaming Media Server
+Epoch:		2
 Group:		System/Servers
 License:	GPL
 URL:		http://www.icecast.org
 Source0:	http://downloads.us.xiph.org/releases/icecast/%{name}-%{version}.tar.bz2
-Source1:	%{name}.init.bz2
+Source1:	%{name}.init
 Source2:	%{name}.logrotate
 Patch0:		%{name}.conf.patch
 Patch1:		%{name}-curl.patch
-BuildRoot:	%{_tmppath}/%{name}-buildroot
 Requires(pre):	rpm-helper
 Requires(post):	rpm-helper
-Requires(postun):	rpm-helper
-Requires(preun):	rpm-helper
+Requires(postun): rpm-helper
+Requires(preun): rpm-helper
 BuildRequires:	libxslt-devel
 BuildRequires:	libcurl-devel
 BuildRequires:	libvorbis-devel
 BuildRequires:	libogg-devel
 BuildRequires:	libtheora-devel
 BuildRequires:  speex-devel
-Epoch:		2
+BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root
 
 %description
 Icecast is an Internet based broadcasting system based on the Mpeg Layer III
@@ -37,19 +33,18 @@ own directory servers, or support them, and c) we thought it would be a
 lot of fun.
 
 %prep
-%setup -q -n %{name}-%{version}
-%patch0
+%setup -q
+%patch0 -p0
 %patch1 -p1
-bzcat %{SOURCE1} > %{name}
 
 %build
 ./autogen.sh || :
-%configure
-%make
+%{configure2_5x}
+%{make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
-%makeinstall
+%{makeinstall_std}
 install -d -m 755 $RPM_BUILD_ROOT%{_var}/log/%{name}
 install -d -m 755 $RPM_BUILD_ROOT%{_datadir}/%{name}
 
@@ -57,7 +52,7 @@ install -d -m 755 $RPM_BUILD_ROOT%{_datadir}/%{name}
 rm -rf $RPM_BUILD_ROOT%{_datadir}/doc/%{name}
 
 install -d -m 755 $RPM_BUILD_ROOT%{_initrddir}
-install -m 755 %{name} $RPM_BUILD_ROOT%{_initrddir}
+install -m 755 %{SOURCE1} $RPM_BUILD_ROOT%{_initrddir}/%{name}
 
 # logrotate
 install -d %{buildroot}%{_sysconfdir}/logrotate.d/
@@ -84,13 +79,10 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root)
 %doc AUTHORS COPYING HACKING README TODO
-%{_bindir}/*
+%{_bindir}/%{name}
 %{_datadir}/%{name}
 %attr(-,icecast,icecast) %{_var}/log/%{name}
 %attr(-,icecast,icecast) %dir %{_var}/run/%{name}/
 %config(noreplace) %{_sysconfdir}/%{name}.xml
 %config(noreplace) %{_initrddir}/%{name}
 %config(noreplace) %{_sysconfdir}/logrotate.d/%{name}
-
-
-
