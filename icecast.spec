@@ -1,6 +1,6 @@
 Name:		icecast
 Version:	2.3.1
-Release:	%mkrel 4
+Release:	%mkrel 5
 Summary:	Streaming Media Server
 Epoch:		2
 Group:		System/Servers
@@ -84,5 +84,5 @@ rm -rf $RPM_BUILD_ROOT
 %attr(-,icecast,icecast) %{_var}/log/%{name}
 %attr(-,icecast,icecast) %dir %{_var}/run/%{name}/
 %config(noreplace) %{_sysconfdir}/%{name}.xml
-%config(noreplace) %{_initrddir}/%{name}
+%{_initrddir}/%{name}
 %config(noreplace) %{_sysconfdir}/logrotate.d/%{name}
