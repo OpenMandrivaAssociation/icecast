@@ -21,6 +21,7 @@ BuildRequires:	libvorbis-devel
 BuildRequires:	libogg-devel
 BuildRequires:	libtheora-devel
 BuildRequires:  speex-devel
+BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root
 
 %description
 Icecast is an Internet based broadcasting system based on the Mpeg Layer III
