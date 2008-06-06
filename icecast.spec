@@ -1,16 +1,15 @@
 Name:		icecast
-Version:	2.3.1
-Release:	%mkrel 5
+Version:	2.3.2
+Release:	%mkrel 1
 Summary:	Streaming Media Server
 Epoch:		2
 Group:		System/Servers
 License:	GPL
 URL:		http://www.icecast.org
-Source0:	http://downloads.us.xiph.org/releases/icecast/%{name}-%{version}.tar.bz2
+Source0:	http://downloads.us.xiph.org/releases/icecast/%{name}-%{version}.tar.gz
 Source1:	%{name}.init
 Source2:	%{name}.logrotate
 Patch0:		%{name}.conf.patch
-Patch1:		%{name}-curl.patch
 Requires(pre):	rpm-helper
 Requires(post):	rpm-helper
 Requires(postun): rpm-helper
@@ -35,7 +34,6 @@ lot of fun.
 %prep
 %setup -q
 %patch0 -p0
-%patch1 -p1
 
 %build
 ./autogen.sh || :
