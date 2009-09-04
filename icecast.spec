@@ -1,6 +1,6 @@
 Name:		icecast
 Version:	2.3.2
-Release:	%mkrel 2
+Release:	%mkrel 3
 Summary:	Streaming Media Server
 Epoch:		2
 Group:		System/Servers
