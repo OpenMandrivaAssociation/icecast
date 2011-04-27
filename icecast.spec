@@ -20,7 +20,6 @@ BuildRequires:	libvorbis-devel
 BuildRequires:	libogg-devel
 BuildRequires:	libtheora-devel
 BuildRequires:  speex-devel
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root
 
 %description
 Icecast is an Internet based broadcasting system based on the Mpeg Layer III
@@ -33,34 +32,34 @@ lot of fun.
 
 %prep
 %setup -q
-%patch0 -p0
+%patch0 -p0 -b .orig
 
 %build
-./autogen.sh || :
-%{configure2_5x}
-%{make}
+%configure2_5x
+%make
 
 %install
-rm -rf $RPM_BUILD_ROOT
-%{makeinstall_std}
-install -d -m 755 $RPM_BUILD_ROOT%{_var}/log/%{name}
-install -d -m 755 $RPM_BUILD_ROOT%{_datadir}/%{name}
+rm -rf %{buildroot}
+%makeinstall_std
+
+install -d -m 755 %{buildroot}%{_var}/log/%{name}
+install -d -m 755 %{buildroot}%{_datadir}/%{name}
 
 # remove installed documentation
-rm -rf $RPM_BUILD_ROOT%{_datadir}/doc/%{name}
+rm -rf %{buildroot}%{_datadir}/doc/%{name}
 
-install -d -m 755 $RPM_BUILD_ROOT%{_initrddir}
-install -m 755 %{SOURCE1} $RPM_BUILD_ROOT%{_initrddir}/%{name}
+install -d -m 755 %{buildroot}%{_initrddir}
+install -m 755 %{SOURCE1} %{buildroot}%{_initrddir}/%{name}
 
 # logrotate
 install -d %{buildroot}%{_sysconfdir}/logrotate.d/
 install -m644 %{SOURCE2} %{buildroot}%{_sysconfdir}/logrotate.d/%{name}
 
 # to hold pid file ( need to be writable by icecast )
-mkdir -p $RPM_BUILD_ROOT/%{_var}/run/%{name}/
+mkdir -p %{buildroot}/%{_var}/run/%{name}/
 
 %clean 
-rm -rf $RPM_BUILD_ROOT
+rm -rf %{buildroot}
 
 %pre
 %_pre_useradd %{name} %{_datadir}/%{name} /bin/false
