@@ -1,0 +1,38 @@
+--- ./conf/icecast.xml.in.orig	2008-04-04 17:14:10.000000000 +0200
++++ ./conf/icecast.xml.in	2011-04-27 20:45:48.000000000 +0200
+@@ -102,7 +102,7 @@
+         <hidden>1</hidden>
+         <no-yp>1</no-yp>
+         <authentication type="htpasswd">
+-                <option name="filename" value="myauth"/>
++                <option name="filename" value="/usr/share/icecast/myauth"/>
+                 <option name="allow_duplicate_users" value="0"/>
+         </authentication>
+         <on-connect>/home/icecast/bin/stream-start</on-connect>
+@@ -129,10 +129,10 @@
+ 
+         <!-- Note that if <chroot> is turned on below, these paths must both
+              be relative to the new root, not the original root -->
+-        <logdir>@localstatedir@/log/@PACKAGE@</logdir>
++        <logdir>/var/log/icecast</logdir>
+         <webroot>@pkgdatadir@/web</webroot>
+         <adminroot>@pkgdatadir@/admin</adminroot>
+-        <!-- <pidfile>@pkgdatadir@/icecast.pid</pidfile> -->
++        <pidfile>/var/run/icecast/icecast.pid</pidfile>
+ 
+         <!-- Aliases: treat requests for 'source' path as being for 'dest' path
+              May be made specific to a port or bound address using the "port"
+@@ -164,10 +164,10 @@
+ 
+     <security>
+         <chroot>0</chroot>
+-        <!--
++        <!-- Changing user will break logrotate support ( cannot create pid file )
+         <changeowner>
+-            <user>nobody</user>
+-            <group>nogroup</group>
++            <user>icecast</user>
++            <group>icecast</group>
+         </changeowner>
+         -->
+     </security>
