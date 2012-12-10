@@ -1,4 +1,2 @@
 sources:
-  "icecast-2.3.2.tar.gz:"	a52b13505548c2eff2c64aab95a42dcafda11227
-  "icecast.init:"	900848ad0fb60dbfa9ae48fed2d7c06a04d1ae34
-  "icecast.logrotate:"	19f3a2f71e00a9ffd06427cbe829269ad0d44139
+  "icecast-2.3.2.tar.gz": a52b13505548c2eff2c64aab95a42dcafda11227

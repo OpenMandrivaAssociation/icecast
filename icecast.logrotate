@@ -1,0 +1,9 @@
+/var/log/icecast/access.log /var/log/icecast/error.log {
+    create 644 icecast icecast
+    weekly
+    notifempty
+    missingok
+    postrotate
+    [ -r /var/run/icecast/icecast.pid ] && /bin/kill -HUP `/bin/cat /var/run/icecast/icecast.pid` >/dev/null 2>&1 || true
+    endscript
+}
