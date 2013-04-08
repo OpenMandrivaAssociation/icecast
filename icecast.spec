@@ -1,14 +1,16 @@
 Name:		icecast
-Version:	2.3.2
-Release:	%mkrel 3
+Version:	2.3.3
+Release:	1
 Summary:	Streaming Media Server
 Epoch:		2
 Group:		System/Servers
 License:	GPL
 URL:		http://www.icecast.org
 Source0:	http://downloads.us.xiph.org/releases/icecast/%{name}-%{version}.tar.gz
-Source1:	%{name}.init
-Source2:	%{name}.logrotate
+Source1:	status3.xsl
+Source2:	icecast.service
+Source3:	icecast.logrotate
+Source4:	icecast.xml
 Patch0:		%{name}.conf.patch
 Requires(pre):	rpm-helper
 Requires(post):	rpm-helper
@@ -33,33 +35,31 @@ lot of fun.
 %prep
 %setup -q
 %patch0 -p0 -b .orig
+find -name "*.html" -or -name "*.jpg" -or -name "*.css" | xargs chmod 644
+%{__sed} -i -e 's/icecast2/icecast/g' debian/icecast2.1
+
 
 %build
-%configure2_5x
+%configure2_5x \
+        --with-curl \
+        --with-openssl \
+        --with-ogg \
+        --with-theora \
+        --with-speex
 %make
 
 %install
-rm -rf %{buildroot}
 %makeinstall_std
+rm -rf %{buildroot}%{_datadir}/icecast/doc
+rm -rf %{buildroot}%{_docdir}/icecast
+install -D -m 644 %{SOURCE1} %{buildroot}%{_datadir}/icecast/web/status3.xsl
+install -D -m 644 %{SOURCE2} %{buildroot}%{_unitdir}/icecast.service
+install -D -m 644 %{SOURCE3} %{buildroot}%{_sysconfdir}/logrotate.d/icecast
+install -D -m 640 %{SOURCE4} %{buildroot}%{_sysconfdir}/icecast.xml
+install -D -m 644 debian/icecast2.1 %{buildroot}%{_mandir}/man1/icecast.1
+mkdir -p %{buildroot}%{_localstatedir}/log/icecast
+mkdir -p %{buildroot}%{_localstatedir}/run/icecast
 
-install -d -m 755 %{buildroot}%{_var}/log/%{name}
-install -d -m 755 %{buildroot}%{_datadir}/%{name}
-
-# remove installed documentation
-rm -rf %{buildroot}%{_datadir}/doc/%{name}
-
-install -d -m 755 %{buildroot}%{_initrddir}
-install -m 755 %{SOURCE1} %{buildroot}%{_initrddir}/%{name}
-
-# logrotate
-install -d %{buildroot}%{_sysconfdir}/logrotate.d/
-install -m644 %{SOURCE2} %{buildroot}%{_sysconfdir}/logrotate.d/%{name}
-
-# to hold pid file ( need to be writable by icecast )
-mkdir -p %{buildroot}/%{_var}/run/%{name}/
-
-%clean 
-rm -rf %{buildroot}
 
 %pre
 %_pre_useradd %{name} %{_datadir}/%{name} /bin/false
@@ -74,15 +74,15 @@ rm -rf %{buildroot}
 %_postun_userdel %{name}
 
 %files
-%defattr(-,root,root)
 %doc AUTHORS COPYING HACKING README TODO
 %{_bindir}/%{name}
 %{_datadir}/%{name}
 %attr(-,icecast,icecast) %{_var}/log/%{name}
 %attr(-,icecast,icecast) %dir %{_var}/run/%{name}/
 %config(noreplace) %{_sysconfdir}/%{name}.xml
-%{_initrddir}/%{name}
 %config(noreplace) %{_sysconfdir}/logrotate.d/%{name}
+%{_mandir}/man1/icecast.1.*
+%{_unitdir}/icecast.service
 
 
 %changelog

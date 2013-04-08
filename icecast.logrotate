@@ -1,9 +1,8 @@
-/var/log/icecast/access.log /var/log/icecast/error.log {
-    create 644 icecast icecast
-    weekly
-    notifempty
+/var/log/icecast/*log {
     missingok
+    notifempty
+    sharedscripts
     postrotate
-    [ -r /var/run/icecast/icecast.pid ] && /bin/kill -HUP `/bin/cat /var/run/icecast/icecast.pid` >/dev/null 2>&1 || true
+	/bin/kill -HUP `cat /var/run/icecast/icecast.pid 2>/dev/null` 2> /dev/null || true
     endscript
 }

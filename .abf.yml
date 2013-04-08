@@ -1,2 +1,4 @@
+removed_sources:
+  icecast-2.3.2.tar.gz: a52b13505548c2eff2c64aab95a42dcafda11227
 sources:
-  "icecast-2.3.2.tar.gz": a52b13505548c2eff2c64aab95a42dcafda11227
+  icecast-2.3.3.tar.gz: 61cf1bd5b4ed491aad488dc6cf1ca2d8eb657363
