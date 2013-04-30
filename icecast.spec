@@ -1,6 +1,6 @@
 Name:		icecast
 Version:	2.3.3
-Release:	1
+Release:	2
 Summary:	Streaming Media Server
 Epoch:		2
 Group:		System/Servers
@@ -16,12 +16,12 @@ Requires(pre):	rpm-helper
 Requires(post):	rpm-helper
 Requires(postun): rpm-helper
 Requires(preun): rpm-helper
-BuildRequires:	libxslt-devel
-BuildRequires:	libcurl-devel
-BuildRequires:	libvorbis-devel
-BuildRequires:	libogg-devel
-BuildRequires:	libtheora-devel
-BuildRequires:  speex-devel
+BuildRequires:	pkgconfig(libxslt)
+BuildRequires:	pkgconfig(libcurl)
+BuildRequires:	pkgconfig(vorbis)
+BuildRequires:	pkgconfig(ogg)
+BuildRequires:	pkgconfig(theora)
+BuildRequires:  pkgconfig(speex)
 
 %description
 Icecast is an Internet based broadcasting system based on the Mpeg Layer III
