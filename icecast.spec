@@ -1,7 +1,7 @@
 Summary:	Streaming Media Server
 Name:		icecast
 Version:	2.3.3
-Release:	4
+Release:	5
 Epoch:		2
 Group:		System/Servers
 License:	GPLv2+
