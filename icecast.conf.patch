@@ -1,15 +1,16 @@
---- ./conf/icecast.xml.in.orig	2008-04-04 17:14:10.000000000 +0200
-+++ ./conf/icecast.xml.in	2011-04-27 20:45:48.000000000 +0200
-@@ -102,7 +102,7 @@
+diff -up icecast-2.4.4/conf/icecast.xml.in.orig icecast-2.4.4/conf/icecast.xml.in
+--- icecast-2.4.4/conf/icecast.xml.in.orig	2018-10-31 18:52:49.000000000 +0100
++++ icecast-2.4.4/conf/icecast.xml.in	2022-09-27 00:25:22.097945924 +0200
+@@ -161,7 +161,7 @@
          <hidden>1</hidden>
-         <no-yp>1</no-yp>
+         <public>1</public>
          <authentication type="htpasswd">
 -                <option name="filename" value="myauth"/>
 +                <option name="filename" value="/usr/share/icecast/myauth"/>
                  <option name="allow_duplicate_users" value="0"/>
          </authentication>
-         <on-connect>/home/icecast/bin/stream-start</on-connect>
-@@ -129,10 +129,10 @@
+         <http-headers>
+@@ -195,10 +195,10 @@
  
          <!-- Note that if <chroot> is turned on below, these paths must both
               be relative to the new root, not the original root -->
@@ -22,7 +23,7 @@
  
          <!-- Aliases: treat requests for 'source' path as being for 'dest' path
               May be made specific to a port or bound address using the "port"
-@@ -164,10 +164,10 @@
+@@ -234,10 +234,10 @@
  
      <security>
          <chroot>0</chroot>

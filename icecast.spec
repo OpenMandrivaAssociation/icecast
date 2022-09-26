@@ -1,7 +1,7 @@
 Summary:	Streaming Media Server
 Name:		icecast
-Version:	2.3.3
-Release:	5
+Version:	2.4.4
+Release:	1
 Epoch:		2
 Group:		System/Servers
 License:	GPLv2+
@@ -39,7 +39,6 @@ lot of fun.
 %attr(-,icecast,icecast) %dir %{_var}/run/%{name}/
 %config(noreplace) %{_sysconfdir}/%{name}.xml
 %config(noreplace) %{_sysconfdir}/logrotate.d/%{name}
-%{_mandir}/man1/icecast.1.*
 %{_unitdir}/icecast.service
 
 %pre
@@ -53,35 +52,30 @@ lot of fun.
 
 %postun
 %_postun_userdel %{name}
-%systemd_postun
+%systemd_postun %{name}.service
 
 #----------------------------------------------------------------------------
 
 %prep
-%setup -q
-%patch0 -p0 -b .orig
+%autosetup -p1
 find -name "*.html" -or -name "*.jpg" -or -name "*.css" | xargs chmod 644
-sed -i -e 's/icecast2/icecast/g' debian/icecast2.1
-
 
 %build
-%configure2_5x \
+%configure \
 	--with-curl \
 	--with-openssl \
 	--with-ogg \
 	--with-theora \
 	--with-speex
-%make
+%make_build
 
 %install
-%makeinstall_std
+%make_install
 rm -rf %{buildroot}%{_datadir}/icecast/doc
 rm -rf %{buildroot}%{_docdir}/icecast
 install -D -m 644 %{SOURCE1} %{buildroot}%{_datadir}/icecast/web/status3.xsl
 install -D -m 644 %{SOURCE2} %{buildroot}%{_unitdir}/%{name}.service
 install -D -m 644 %{SOURCE3} %{buildroot}%{_sysconfdir}/logrotate.d/icecast
 install -D -m 640 %{SOURCE4} %{buildroot}%{_sysconfdir}/icecast.xml
-install -D -m 644 debian/icecast2.1 %{buildroot}%{_mandir}/man1/icecast.1
 mkdir -p %{buildroot}%{_localstatedir}/log/icecast
 mkdir -p %{buildroot}%{_localstatedir}/run/icecast
-
