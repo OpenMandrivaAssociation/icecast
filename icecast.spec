@@ -5,7 +5,7 @@ Release:	1
 Epoch:		2
 Group:		System/Servers
 License:	GPLv2+
-Url:		http://www.icecast.org
+Url:		https://www.icecast.org
 Source0:	http://downloads.us.xiph.org/releases/icecast/%{name}-%{version}.tar.gz
 Source1:	status3.xsl
 Source2:	icecast.service
