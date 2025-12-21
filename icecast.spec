@@ -12,6 +12,11 @@ Source2:	icecast.service
 Source3:	icecast.logrotate
 Source4:	icecast.xml
 Patch0:		%{name}.conf.patch
+BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	libtool-base
+BuildRequires:	slibtool
+BuildRequires:	make
 BuildRequires:	pkgconfig(libcurl)
 BuildRequires:	pkgconfig(libxslt)
 BuildRequires:	pkgconfig(ogg)
