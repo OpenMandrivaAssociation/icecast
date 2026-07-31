@@ -1,7 +1,7 @@
 Summary:	Streaming Media Server
 Name:		icecast
-Version:	2.4.4
-Release:	2
+Version:	2.5.0
+Release:	1
 Epoch:		2
 Group:		System/Servers
 License:	GPLv2+
@@ -11,7 +11,7 @@ Source1:	status3.xsl
 Source2:	icecast.service
 Source3:	icecast.logrotate
 Source4:	icecast.xml
-Patch0:		%{name}.conf.patch
+# dropped (no longer applies): Patch0:		%{name}.conf.patch
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	libtool-base
